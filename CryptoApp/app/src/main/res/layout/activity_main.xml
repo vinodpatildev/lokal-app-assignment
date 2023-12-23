@@ -138,19 +138,17 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
-
                     <include layout="@layout/rcv_crypto_currency_list_item_shimmer" />
-
                     <include layout="@layout/rcv_crypto_currency_list_item_shimmer" />
-
                     <include layout="@layout/rcv_crypto_currency_list_item_shimmer" />
-
                     <include layout="@layout/rcv_crypto_currency_list_item_shimmer" />
-
                     <include layout="@layout/rcv_crypto_currency_list_item_shimmer" />
-
                     <include layout="@layout/rcv_crypto_currency_list_item_shimmer" />
-
+                    <include layout="@layout/rcv_crypto_currency_list_item_shimmer" />
+                    <include layout="@layout/rcv_crypto_currency_list_item_shimmer" />
+                    <include layout="@layout/rcv_crypto_currency_list_item_shimmer" />
+                    <include layout="@layout/rcv_crypto_currency_list_item_shimmer" />
+                    <include layout="@layout/rcv_crypto_currency_list_item_shimmer" />
                     <include layout="@layout/rcv_crypto_currency_list_item_shimmer" />
 
                 </LinearLayout>

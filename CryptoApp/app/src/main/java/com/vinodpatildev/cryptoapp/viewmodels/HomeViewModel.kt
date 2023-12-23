@@ -8,6 +8,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.vinodpatildev.cryptoapp.Util.Resource
+import com.vinodpatildev.cryptoapp.Util.getCurrentTime
 import com.vinodpatildev.cryptoapp.models.CryptoCurrency
 import com.vinodpatildev.cryptoapp.repository.Repository
 import kotlinx.coroutines.Dispatchers
@@ -71,12 +72,5 @@ class HomeViewModel(
 
     private fun updateLastUpdateTime() {
         lastUpdatedTime.postValue(getCurrentTime())
-    }
-
-    fun getCurrentTime(): String {
-        val dateFormat = SimpleDateFormat("HH:mm:ss")
-        val currentTimeMillis = System.currentTimeMillis()
-        val date = Date(currentTimeMillis)
-        return dateFormat.format(date)
     }
 }
