@@ -30,6 +30,9 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding?.root)
 
+        setSupportActionBar(binding?.toolbar)
+        binding?.toolbarTitle?.text = "Crypto App"
+
         homeViewModel = ViewModelProvider(this, homeViewModelFactory).get(HomeViewModel::class.java)
 
 
