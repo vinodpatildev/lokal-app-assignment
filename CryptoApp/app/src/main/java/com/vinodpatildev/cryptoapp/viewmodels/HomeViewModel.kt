@@ -1,6 +1,8 @@
 package com.vinodpatildev.cryptoapp.viewmodels
 
 import android.app.Application
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
@@ -15,7 +17,20 @@ class HomeViewModel(
     private val app: Application,
     private val repository: Repository
 ) : AndroidViewModel(app) {
+    private val handler = Handler(Looper.getMainLooper())
+    private val intervalMillis = 60000L
+
     val cryptoCurrencyList: MutableLiveData<Resource<List<CryptoCurrency>>> = MutableLiveData()
+    init {
+        reloadCryptoCurrencyList()
+        refreshFunction()
+    }
+    private fun refreshFunction() {
+        handler.postDelayed({
+            reloadCryptoCurrencyList()
+            refreshFunction()
+        }, intervalMillis)
+    }
 
     fun reloadCryptoCurrencyList() = viewModelScope.launch(Dispatchers.IO) {
         cryptoCurrencyList.postValue(Resource.Loading())

@@ -40,12 +40,13 @@ class MainActivity : AppCompatActivity() {
         homeViewModel.cryptoCurrencyList.observe(this, Observer { response ->
             when(response){
                 is Resource.Success -> {
+                    binding?.rcvCryptoCurrencyList?.visibility = View.VISIBLE
+                    binding?.shimmerViewContainer?.visibility = View.INVISIBLE
                     binding?.shimmerViewContainer?.stopShimmer()
                     if(binding?.swipeRefreshLayout?.isRefreshing == true){
                         binding?.swipeRefreshLayout?.isRefreshing = false
                     }
                     binding?.rcvCryptoCurrencyList?.visibility = View.VISIBLE
-                    // TODO : Load data into UI
                     cryptoCurrencyListAdapter =
                         response.data?.let {
                             CryptoCurrencyAdapter(this@MainActivity,it){ cryptoCurrency ->
@@ -58,9 +59,13 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
                 is Resource.Loading -> {
+                    binding?.rcvCryptoCurrencyList?.visibility = View.INVISIBLE
+                    binding?.shimmerViewContainer?.visibility = View.VISIBLE
                     binding?.shimmerViewContainer?.startShimmer()
                 }
                 is Resource.Error -> {
+                    binding?.rcvCryptoCurrencyList?.visibility = View.VISIBLE
+                    binding?.shimmerViewContainer?.visibility = View.INVISIBLE
                     binding?.shimmerViewContainer?.stopShimmer()
                     if(binding?.swipeRefreshLayout?.isRefreshing == true){
                         binding?.swipeRefreshLayout?.isRefreshing = false
@@ -71,9 +76,6 @@ class MainActivity : AppCompatActivity() {
         })
 
         binding?.swipeRefreshLayout?.setOnRefreshListener {
-            binding?.rcvCryptoCurrencyList?.visibility = View.INVISIBLE
-            // TODO : request reload data from viewModel
-            Log.d("logtesttest", "main activity refresh call" )
             homeViewModel.reloadCryptoCurrencyList()
         }
         val itemTouchHelper = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.DOWN) {
@@ -87,7 +89,5 @@ class MainActivity : AppCompatActivity() {
             }
         }
         ItemTouchHelper(itemTouchHelper).attachToRecyclerView(binding?.rcvCryptoCurrencyList)
-
-        homeViewModel.reloadCryptoCurrencyList()
     }
 }
