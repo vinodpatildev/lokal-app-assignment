@@ -76,7 +76,7 @@ class MainActivity : AppCompatActivity() {
         })
 
         homeViewModel.lastUpdatedTime.observe(this, Observer {lastUpdatedTime ->
-            binding?.tvLastUpdateTime?.text = lastUpdatedTime.toString()
+            binding?.tvLastUpdateTime?.text = lastUpdatedTime
         })
 
         binding?.swipeRefreshLayout?.setOnRefreshListener {

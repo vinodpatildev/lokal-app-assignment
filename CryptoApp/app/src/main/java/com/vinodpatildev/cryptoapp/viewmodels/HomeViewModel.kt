@@ -12,6 +12,9 @@ import com.vinodpatildev.cryptoapp.models.CryptoCurrency
 import com.vinodpatildev.cryptoapp.repository.Repository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.concurrent.TimeoutException
 
 class HomeViewModel(
     private val app: Application,
@@ -24,44 +27,54 @@ class HomeViewModel(
     val lastUpdatedTime : MutableLiveData<String> = MutableLiveData("")
     init {
         reloadCryptoCurrencyList()
-        refreshFunction()
-    }
-    private fun refreshFunction() {
-        handler.postDelayed({
-            reloadCryptoCurrencyList()
-            refreshFunction()
-        }, intervalMillis)
     }
 
-    fun reloadCryptoCurrencyList() = viewModelScope.launch(Dispatchers.IO) {
-        cryptoCurrencyList.postValue(Resource.Loading())
-        try {
-            val CurrencyList = repository.getCurrencyList().data
-            Log.d("logtesttestt", "reloadCryptoCurrencyList: CurrencyList" + CurrencyList.toString())
-            val exchangeRates = repository.getLiveExchangeRates().data
-            Log.d("logtesttestt", "reloadCryptoCurrencyList: exchangeRates" + exchangeRates.toString())
+    fun reloadCryptoCurrencyList() {
+        viewModelScope.launch(Dispatchers.IO) {
+            cryptoCurrencyList.postValue(Resource.Loading())
+            try {
+                val CurrencyList = repository.getCurrencyList().data
+                Log.d("logtesttestt", "reloadCryptoCurrencyList: CurrencyList" + CurrencyList.toString())
+                val exchangeRates = repository.getLiveExchangeRates().data
+                Log.d("logtesttestt", "reloadCryptoCurrencyList: exchangeRates" + exchangeRates.toString())
 
 
-            val combinedList: List<CryptoCurrency> = CurrencyList.orEmpty()
-                .entries
-                .mapNotNull { entry ->
-                    val currencyCode = entry.key
-                    val cryptoCurrencyListApiData = entry.value
-                    val exchangeRate = exchangeRates?.get(currencyCode)
-                    exchangeRate?.let {
-                        CryptoCurrency(
-                            icon_url = cryptoCurrencyListApiData.iconUrl,
-                            exchange_rate = it,
-                            name = cryptoCurrencyListApiData.name,
-                            name_full = cryptoCurrencyListApiData.fullName,
-                            symbol = cryptoCurrencyListApiData.symbol
-                        )
+                val combinedList: List<CryptoCurrency> = CurrencyList.orEmpty()
+                    .entries
+                    .mapNotNull { entry ->
+                        val currencyCode = entry.key
+                        val cryptoCurrencyListApiData = entry.value
+                        val exchangeRate = exchangeRates?.get(currencyCode)
+                        exchangeRate?.let {
+                            CryptoCurrency(
+                                icon_url = cryptoCurrencyListApiData.iconUrl,
+                                exchange_rate = it,
+                                name = cryptoCurrencyListApiData.name,
+                                name_full = cryptoCurrencyListApiData.fullName,
+                                symbol = cryptoCurrencyListApiData.symbol
+                            )
+                        }
                     }
-                }
-            cryptoCurrencyList.postValue(Resource.Success(combinedList))
-        } catch (e: Exception) {
-            Log.d("logtesttest", "exception : " + e.message.toString())
-            cryptoCurrencyList.postValue(Resource.Error(e.message.toString()))
+                cryptoCurrencyList.postValue(Resource.Success(combinedList))
+                updateLastUpdateTime()
+                // refresh after 3 minutes
+                handler.postDelayed({ reloadCryptoCurrencyList() }, intervalMillis)
+            } catch (e: Exception) {
+                Log.d("logtesttest", "exception : " + e.message.toString())
+                cryptoCurrencyList.postValue(Resource.Error(e.message.toString()))
+                if(e is TimeoutException) reloadCryptoCurrencyList()
+            }
         }
+    }
+
+    private fun updateLastUpdateTime() {
+        lastUpdatedTime.postValue(getCurrentTime())
+    }
+
+    fun getCurrentTime(): String {
+        val dateFormat = SimpleDateFormat("HH:mm:ss")
+        val currentTimeMillis = System.currentTimeMillis()
+        val date = Date(currentTimeMillis)
+        return dateFormat.format(date)
     }
 }
