@@ -61,6 +61,8 @@ class RepositoryImpl(
                 return Resource.Error(response.message())
             }
         }
+        Log.d("InternetDebug", "getCurrencyList: Internet Gone")
+        throw IllegalStateException("Internet not connected")
         return Resource.Error("Internet is not available.")
     }
 
