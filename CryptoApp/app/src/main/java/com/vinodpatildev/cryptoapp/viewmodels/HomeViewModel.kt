@@ -7,16 +7,13 @@ import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.vinodpatildev.cryptoapp.Util.Constant
 import com.vinodpatildev.cryptoapp.Util.Resource
 import com.vinodpatildev.cryptoapp.Util.getCurrentTime
 import com.vinodpatildev.cryptoapp.models.CryptoCurrency
 import com.vinodpatildev.cryptoapp.repository.Repository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import java.math.BigDecimal
-import java.math.RoundingMode
-import java.text.SimpleDateFormat
-import java.util.Date
 import java.util.concurrent.TimeoutException
 
 class HomeViewModel(
@@ -24,10 +21,10 @@ class HomeViewModel(
     private val repository: Repository
 ) : AndroidViewModel(app) {
     private val handler = Handler(Looper.getMainLooper())
-    private val intervalMillis = 180000L
 
     val cryptoCurrencyList: MutableLiveData<Resource<List<CryptoCurrency>>> = MutableLiveData()
-    val lastUpdatedTime : MutableLiveData<String> = MutableLiveData("")
+    val lastUpdatedTime: MutableLiveData<String> = MutableLiveData("")
+
     init {
         reloadCryptoCurrencyList()
     }
@@ -37,10 +34,15 @@ class HomeViewModel(
             cryptoCurrencyList.postValue(Resource.Loading())
             try {
                 val CurrencyList = repository.getCurrencyList().data
-                Log.d("logtesttestt", "reloadCryptoCurrencyList: CurrencyList" + CurrencyList.toString())
+                Log.d(
+                    "logtesttestt",
+                    "reloadCryptoCurrencyList: CurrencyList" + CurrencyList.toString()
+                )
                 val exchangeRates = repository.getLiveExchangeRates().data
-                Log.d("logtesttestt", "reloadCryptoCurrencyList: exchangeRates" + exchangeRates.toString())
-
+                Log.d(
+                    "logtesttestt",
+                    "reloadCryptoCurrencyList: exchangeRates" + exchangeRates.toString()
+                )
 
                 val combinedList: List<CryptoCurrency> = CurrencyList.orEmpty()
                     .entries
@@ -61,11 +63,11 @@ class HomeViewModel(
                 cryptoCurrencyList.postValue(Resource.Success(combinedList))
                 updateLastUpdateTime()
                 // refresh after 3 minutes
-                handler.postDelayed({ reloadCryptoCurrencyList() }, intervalMillis)
+                handler.postDelayed({ reloadCryptoCurrencyList() }, Constant.NEXT_REFRESTH_INTERVAL)
             } catch (e: Exception) {
                 Log.d("logtesttest", "exception : " + e.message.toString())
                 cryptoCurrencyList.postValue(Resource.Error(e.message.toString()))
-                if(e is TimeoutException) reloadCryptoCurrencyList()
+                if (e is TimeoutException) reloadCryptoCurrencyList()
             }
         }
     }
