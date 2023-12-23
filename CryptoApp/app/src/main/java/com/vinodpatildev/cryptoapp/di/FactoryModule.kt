@@ -1,6 +1,7 @@
 package com.vinodpatildev.cryptoapp.di
 
 import android.app.Application
+import com.vinodpatildev.cryptoapp.repository.Repository
 import com.vinodpatildev.cryptoapp.viewmodels.HomeViewModelFactory
 import dagger.Module
 import dagger.Provides
@@ -14,8 +15,8 @@ class FactoryModule {
 
     @Singleton
     @Provides
-    fun provideHomeViewModelFactory(app : Application) : HomeViewModelFactory {
-        return HomeViewModelFactory(app)
+    fun provideHomeViewModelFactory(app : Application, repository: Repository) : HomeViewModelFactory {
+        return HomeViewModelFactory(app, repository)
     }
 
 }

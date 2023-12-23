@@ -15,7 +15,8 @@ android {
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
-
+        buildConfigField("String", "CRYPTO_WEB_URL", "${properties.get("CRYPTO_WEB_URL")}")
+        buildConfigField("String", "CRYPTO_API_ACCESS_KEY", "${properties.get("CRYPTO_API_ACCESS_KEY")}")
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
@@ -37,6 +38,7 @@ android {
     }
     buildFeatures {
         viewBinding = true
+        buildConfig = true
     }
 }
 
@@ -63,7 +65,7 @@ dependencies {
     kapt("com.google.dagger:hilt-android-compiler:2.50")
 //    implementation("androidx.hilt:hilt-lifecycle-viewmodel:1.0.0-alpha03")
     kapt("androidx.hilt:hilt-compiler:1.1.0")
-    implementation("androidx.hilt:hilt-navigation-compose:1.2.0-alpha01")
+//    implementation("androidx.hilt:hilt-navigation-compose:1.2.0-alpha01")
 
     // Retrofit
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
