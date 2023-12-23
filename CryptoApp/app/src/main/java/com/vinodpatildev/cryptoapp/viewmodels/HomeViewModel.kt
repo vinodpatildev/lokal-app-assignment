@@ -12,6 +12,8 @@ import com.vinodpatildev.cryptoapp.models.CryptoCurrency
 import com.vinodpatildev.cryptoapp.repository.Repository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import java.math.BigDecimal
+import java.math.RoundingMode
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.concurrent.TimeoutException

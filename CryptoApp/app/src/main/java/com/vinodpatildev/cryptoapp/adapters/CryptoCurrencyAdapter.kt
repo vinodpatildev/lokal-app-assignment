@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.vinodpatildev.cryptoapp.Util.roundTo6DecimalPlaces
 import com.vinodpatildev.cryptoapp.databinding.RcvCryptoCurrencyListItemBinding
 import com.vinodpatildev.cryptoapp.models.CryptoCurrency
 
@@ -42,7 +43,7 @@ class CryptoCurrencyAdapter(
             binding.apply {
                 tvCryptoCurrencyName.text = cryptoCurrency.name
                 tvCryptoCurrencySymbol.text = cryptoCurrency.symbol
-                tvCryptoCurrencyExchange.text = cryptoCurrency.exchange_rate.toString()
+                tvCryptoCurrencyExchange.text = roundTo6DecimalPlaces(cryptoCurrency.exchange_rate) + "$"
 
                 Glide.with(ctx)
                     .load(cryptoCurrency.icon_url)
