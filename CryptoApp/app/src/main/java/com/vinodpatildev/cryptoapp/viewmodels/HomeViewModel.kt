@@ -18,9 +18,10 @@ class HomeViewModel(
     private val repository: Repository
 ) : AndroidViewModel(app) {
     private val handler = Handler(Looper.getMainLooper())
-    private val intervalMillis = 60000L
+    private val intervalMillis = 180000L
 
     val cryptoCurrencyList: MutableLiveData<Resource<List<CryptoCurrency>>> = MutableLiveData()
+    val lastUpdatedTime : MutableLiveData<String> = MutableLiveData("")
     init {
         reloadCryptoCurrencyList()
         refreshFunction()

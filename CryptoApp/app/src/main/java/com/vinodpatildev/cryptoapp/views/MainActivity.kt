@@ -75,6 +75,10 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
+        homeViewModel.lastUpdatedTime.observe(this, Observer {lastUpdatedTime ->
+            binding?.tvLastUpdateTime?.text = lastUpdatedTime.toString()
+        })
+
         binding?.swipeRefreshLayout?.setOnRefreshListener {
             homeViewModel.reloadCryptoCurrencyList()
         }
