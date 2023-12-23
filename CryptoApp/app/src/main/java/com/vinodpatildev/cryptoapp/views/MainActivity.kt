@@ -45,11 +45,10 @@ class MainActivity : AppCompatActivity() {
                     // TODO : Load data into UI
                     cryptoCurrencyListAdapter =
                         response.data?.let {
-                            CryptoCurrencyAdapter(it){ cryptoCurrency ->
+                            CryptoCurrencyAdapter(this@MainActivity,it){ cryptoCurrency ->
                                 Toast.makeText(this, cryptoCurrency.name + " selected.", Toast.LENGTH_SHORT).show()
                             }
                         }
-
                     binding?.rcvCryptoCurrencyList?.apply {
                         layoutManager = LinearLayoutManager(this@MainActivity)
                         adapter = cryptoCurrencyListAdapter
@@ -63,7 +62,7 @@ class MainActivity : AppCompatActivity() {
                     if(binding?.swipeRefreshLayout?.isRefreshing == true){
                         binding?.swipeRefreshLayout?.isRefreshing = false
                     }
-                    Toast.makeText(this,response.message + "\n activity toast",Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this,response.message,Toast.LENGTH_SHORT).show()
                 }
             }
         })

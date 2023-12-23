@@ -1,12 +1,15 @@
 package com.vinodpatildev.cryptoapp.adapters
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.vinodpatildev.cryptoapp.databinding.RcvCryptoCurrencyListItemBinding
 import com.vinodpatildev.cryptoapp.models.CryptoCurrency
 
 class CryptoCurrencyAdapter(
+    private val ctx: Context,
     private val cryptoCurrencyList: List<CryptoCurrency>,
     private val listener: (cryptoCurrency: CryptoCurrency) -> Unit
 ) : RecyclerView.Adapter<CryptoCurrencyAdapter.CryptoCurrencyViewHolder>() {
@@ -39,7 +42,12 @@ class CryptoCurrencyAdapter(
             binding.apply {
                 tvCryptoCurrencyName.text = cryptoCurrency.name
                 tvCryptoCurrencySymbol.text = cryptoCurrency.symbol
-                tvCryptoCurrencyExchange.text = cryptoCurrency.name_full
+                tvCryptoCurrencyExchange.text = cryptoCurrency.exchange_rate.toString()
+
+                Glide.with(ctx)
+                    .load(cryptoCurrency.icon_url)
+                    .into(ivCryptoCurrencyIcon)
+
             }
 
             binding.root.setOnClickListener {

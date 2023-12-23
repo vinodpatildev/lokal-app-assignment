@@ -27,6 +27,7 @@
                 android:layout_marginEnd="8dp">
 
                 <ImageView
+                    android:id="@+id/iv_crypto_currency_icon"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:src="@drawable/crypto_currency_demo_icon" />
